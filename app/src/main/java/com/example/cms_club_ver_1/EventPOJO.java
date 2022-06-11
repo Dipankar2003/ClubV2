@@ -2,40 +2,74 @@ package com.example.cms_club_ver_1;
 
 public class EventPOJO
 {
-    public String event_name;
-    public String date;
-    public String discription;
+
+    public String Name;
+    public String Date;
+    public String Description;
+    //public String Photo;
+
+
     public boolean isShrink = true;
 
-    public EventPOJO(String event_name, String date, String discription) {
-        this.event_name = event_name;
-        this.date = date;
-        this.discription = discription;
+    public EventPOJO(String name, String date, String description ) {
+        Name = name;
+        Date = date;
+        Description = description;
+        //Photo=photo;
     }
 
-    public String getEvent_name() {
-        return event_name;
+    public String getName() {
+        return Name;
     }
 
-    public void setEvent_name(String event_name) {
-        this.event_name = event_name;
+    public void setName(String name) {
+        this.Name = name;
     }
 
     public String getDate() {
-        return date;
+        return Date;
     }
 
     public void setDate(String date) {
-        this.date = date;
+        this.Date = date;
     }
 
-    public String getDiscription() {
-        return discription;
+    public String getDescription() {
+        return Description;
     }
 
-    public void setDiscription(String discription) {
-        this.discription = discription;
+    public void setDescription(String description) {
+        this.Description = description;
     }
+//    public EventPOJO(String name, String date, String discription) {
+//        this.Name = event_name;
+//        this.date = date;
+//        this.discription = discription;
+//    }
+//
+//    public String getName() {
+//        return Name;
+//    }
+//
+//    public void setEvent_name(String event_name) {
+//        this.Name = event_name;
+//    }
+//
+//    public String getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(String date) {
+//        this.date = date;
+//    }
+//
+//    public String getDiscription() {
+//        return discription;
+//    }
+//
+//    public void setDiscription(String discription) {
+//        this.discription = discription;
+//    }
 
     public boolean isShrink() {
         return isShrink;

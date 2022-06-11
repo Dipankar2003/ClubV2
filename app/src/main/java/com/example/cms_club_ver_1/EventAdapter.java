@@ -36,9 +36,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Holder>
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, @SuppressLint("RecyclerView") int position) {
-        holder.textEventName.setText(arrayList.get(position).getEvent_name());
+        holder.textEventName.setText(arrayList.get(position).getName());
         holder.textDate.setText(arrayList.get(position).getDate());
-        holder.expandableDescription.setText(arrayList.get(position).getDiscription());
+        holder.expandableDescription.setText(arrayList.get(position).getDescription());
         holder.expandableDescription.setOnStateChangeListener(new OnStateChangeListener() {
             @Override
             public void onStateChange(boolean isShrink) {
@@ -47,7 +47,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Holder>
                 arrayList.set(position,item);
             }
         });
-        holder.expandableDescription.setText(arrayList.get(position).getDiscription());
+        holder.expandableDescription.setText(arrayList.get(position).getDescription());
         holder.expandableDescription.resetState(arrayList.get(position).isShrink);
         holder.bind(arrayList.get(position),listener);
     }

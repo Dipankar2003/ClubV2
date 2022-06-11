@@ -7,10 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -18,7 +25,15 @@ public class fragment_event extends Fragment {
 
     public AppCompatButton btn_organize_event;
     public RecyclerView rv;
-    public ArrayList<EventPOJO> arrayList;
+    public ArrayList<event> arrayList;
+
+    public DatabaseReference database;
+    private Adapter adapter;
+    private String currentUser ="WSM";  //user.getCurrentuser();
+
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -28,19 +43,35 @@ public class fragment_event extends Fragment {
         rv = view.findViewById(R.id.rv_event);
         arrayList = new ArrayList<>();
 
-        arrayList.add(new EventPOJO("Event1","12/12/1200","Generating random paragraphs can be an excellent way for writers to get their creative flow going at the beginning of the day. The writer has no idea what topic the random paragraph will be about when it appears. This forces the writer to use creativity to complete one of three common writing challenges. The writer can use the paragraph as the first one of a short story and build upon it. A second option is to use the random paragraph somewhere in a short story they create. The third option is to have the random paragraph be the ending paragraph in a short story. No matter which of these challenges is undertaken, the writer is forced to use creativity to incorporate the paragraph into their writing."));
-        arrayList.add(new EventPOJO("Event2","03/02/1200","Generating random paragraphs can be an excellent way for writers to get their creative flow going at the beginning of the day. The writer has no idea what topic the random paragraph will be about when it appears. This forces the writer to use creativity to complete one of three common writing challenges. The writer can use the paragraph as the first one of a short story and build upon it. A second option is to use the random paragraph somewhere in a short story they create. The third option is to have the random paragraph be the ending paragraph in a short story. No matter which of these challenges is undertaken, the writer is forced to use creativity to incorporate the paragraph into their writing.\""));
-        arrayList.add(new EventPOJO("Event3","02/11/1200","Sunday"));
-        arrayList.add(new EventPOJO("Event4","04/09/1200","Sunday"));
-        arrayList.add(new EventPOJO("Event5","05/10/1200","Sunday"));
 
+//        arrayList.add(new EventPOJO("Event1","12/12/1200","Generating random paragraphs can be an excellent way for writers to get their creative flow going at the beginning of the day. The writer has no idea what topic the random paragraph will be about when it appears. This forces the writer to use creativity to complete one of three common writing challenges. The writer can use the paragraph as the first one of a short story and build upon it. A second option is to use the random paragraph somewhere in a short story they create. The third option is to have the random paragraph be the ending paragraph in a short story. No matter which of these challenges is undertaken, the writer is forced to use creativity to incorporate the paragraph into their writing."));
+//        arrayList.add(new EventPOJO("Event2","03/02/1200","Generating random paragraphs can be an excellent way for writers to get their creative flow going at the beginning of the day. The writer has no idea what topic the random paragraph will be about when it appears. This forces the writer to use creativity to complete one of three common writing challenges. The writer can use the paragraph as the first one of a short story and build upon it. A second option is to use the random paragraph somewhere in a short story they create. The third option is to have the random paragraph be the ending paragraph in a short story. No matter which of these challenges is undertaken, the writer is forced to use creativity to incorporate the paragraph into their writing.\""));
+//        arrayList.add(new EventPOJO("Event3","02/11/1200","Sunday"));
+//        arrayList.add(new EventPOJO("Event4","04/09/1200","Sunday"));
+//        arrayList.add(new EventPOJO("Event5","05/10/1200","Sunday"));
+
+        Toast.makeText(getContext(),"enter1",Toast.LENGTH_SHORT).show();
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        rv.setAdapter(new EventAdapter(arrayList, new OnEventClickListener() {
+        database= FirebaseDatabase.getInstance().getReference();
+
+        adapter=new Adapter(arrayList, new OnEventClickListener() {
             @Override
             public void onItemClicked(EventPOJO eventPOJO) {
-                Toast.makeText(getContext(),eventPOJO.getEvent_name(),Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(),event.getName(),Toast.LENGTH_SHORT).show();
             }
-        }));
+        });
+//        rv.setAdapter(new EventAdapter(arrayList, new OnEventClickListener() {
+//            @Override
+//            public void onItemClicked(EventPOJO eventPOJO) {
+//                Toast.makeText(getContext(),eventPOJO.getEvent_name(),Toast.LENGTH_SHORT).show();
+//            }
+//        }));
+        Toast.makeText(getContext(),"enter2",Toast.LENGTH_SHORT).show();
+
+
+
+        Toast.makeText(getContext(),"enter4",Toast.LENGTH_SHORT).show();
+
 
 
         btn_organize_event.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +82,28 @@ public class fragment_event extends Fragment {
                 startActivity(intent);
             }
         });
+        //
+        database.child("Club").child("WSM").child("Event").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                    event event=dataSnapshot.getValue(event.class);
+                    arrayList.add(event);
+                }
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        //
+        Toast.makeText(getContext(),"enter3",Toast.LENGTH_SHORT).show();
+
+        rv.setAdapter(adapter);
 
         return view;
     }

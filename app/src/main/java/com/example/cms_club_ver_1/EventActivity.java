@@ -17,15 +17,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.HashMap;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -59,6 +72,10 @@ public class EventActivity extends AppCompatActivity {
     public String EVENTDESCRIPTION;
     public Uri EVENTPOSTERURI;
 
+    private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private DatabaseReference dbRef;
+    private FirebaseStorage storage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +96,9 @@ public class EventActivity extends AppCompatActivity {
         textEventDescription = findViewById(R.id.txt_event_description);
 
         img_event_poster = findViewById(R.id.img_event_poster);
+
+        dbRef = FirebaseDatabase.getInstance().getReference();
+        storage = FirebaseStorage.getInstance();
 
         btn_event_edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +204,33 @@ public class EventActivity extends AppCompatActivity {
 //                use variable EVENTDESCRIPTION;
                 //store above data in firebase
 
+                String clubName = "WSM";
+
+                HashMap<String,Object> hashMap = new HashMap<>();
+                hashMap.put("Name", EVENTNAME);
+                hashMap.put("Date", EVENTDATE);
+               // hashMap.put("Photo", EVENTPOSTERURI.toString());
+                hashMap.put("Description", EVENTDESCRIPTION);
+
+                dbRef.child("Club").child(clubName).child("Event").child(EVENTDATE).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(EventActivity.this, "Event Added", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                StorageReference reference= storage.getReference().child(clubName+"/Event/"+EVENTDATE+".jpg");
+                reference.putFile(EVENTPOSTERURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                dbRef.child("Club").child(clubName).child("Event").child(EVENTDATE).child("Banner").setValue(uri.toString());
+                            }
+                        });
+                    }
+                });
             }
         });
     }
