@@ -56,7 +56,7 @@ public class fragment_event extends Fragment {
 
         adapter=new Adapter(arrayList, new OnEventClickListener() {
             @Override
-            public void onItemClicked(EventPOJO eventPOJO) {
+            public void onItemClicked(event Event) {
                // Toast.makeText(getContext(),event.getName(),Toast.LENGTH_SHORT).show();
             }
         });
@@ -86,7 +86,7 @@ public class fragment_event extends Fragment {
         database.child("Club").child("WSM").child("Event").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                arrayList.clear();
                 for (DataSnapshot dataSnapshot:snapshot.getChildren()){
                     event event=dataSnapshot.getValue(event.class);
                     arrayList.add(event);

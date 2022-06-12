@@ -1,6 +1,7 @@
 package com.example.cms_club_ver_1;
 
 public class event {
+    boolean isShrink;
     String Name,Date,Description,Banner;
 
     public String getBanner() {
@@ -43,6 +44,14 @@ public class event {
 
     public void setDescription(String description) {
         Description = description;
+    }
+    public boolean isShrink() {
+
+        return isShrink;
+    }
+
+    public void setShrink(boolean shrink) {
+        isShrink = shrink;
     }
 
 }

@@ -61,11 +61,13 @@ public class fragment_assistant_board extends Fragment {
 
         adapter = new mainAdapter(arrayList, new OnMainBoardRowClickListener() {
             @Override
-            public void onItemClick(MainBoardPOJO mainBoardPOJO) {
+            public void onItemClick(main mainBoardPOJO) {
                 Toast.makeText(getContext(),mainBoardPOJO.getName(),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(),mainBoardPOJO.getName(),Toast.LENGTH_SHORT).show();
+                String position=mainBoardPOJO.getPosition().toString();
+
                 Intent intent = new Intent(getContext(),EditActivity.class);
                 intent.putExtra("CALLED_FROM",3);
+                intent.putExtra("pos", position);
                 startActivity(intent);
             }
         });
@@ -75,7 +77,7 @@ public class fragment_assistant_board extends Fragment {
         database.child("Club").child(currentUser).child("Board").child("Assistant").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                arrayList.clear();
                 for(DataSnapshot dataSnapshot:snapshot.getChildren())
                 {
                     main main1=dataSnapshot.getValue(main.class);

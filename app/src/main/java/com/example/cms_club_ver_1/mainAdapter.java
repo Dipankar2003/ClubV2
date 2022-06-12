@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class mainAdapter extends RecyclerView.Adapter<mainAdapter.MyViewHolder> {
 
@@ -41,6 +42,8 @@ public class mainAdapter extends RecyclerView.Adapter<mainAdapter.MyViewHolder> 
         holder.name.setText(list.get(position).getName());
         holder.position.setText(list.get(position).getPosition());
         Glide.with(holder.img.getContext()).load(current.getPhoto()).into(holder.img);
+         holder.bind(current,listener);
+
     }
 
     @Override
@@ -61,6 +64,13 @@ public class mainAdapter extends RecyclerView.Adapter<mainAdapter.MyViewHolder> 
             img = itemView.findViewById(R.id.profile);
             name = itemView.findViewById(R.id.txt_name);
             position = itemView.findViewById(R.id.txt_role);
+        }
+        public void bind(final main item, final OnMainBoardRowClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
         }
     }
 }

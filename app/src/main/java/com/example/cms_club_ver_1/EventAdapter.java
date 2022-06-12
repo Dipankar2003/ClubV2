@@ -73,7 +73,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.Holder>
         public void bind(final EventPOJO item, final OnEventClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    listener.onItemClicked(item);
+                 //   listener.onItemClicked(item);
                 }
             });
         }

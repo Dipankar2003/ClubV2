@@ -100,6 +100,7 @@ public class MainBoardAddPage extends AppCompatActivity
                     case 2 :
                         Toast.makeText(getApplicationContext(),"data img to firebase for main board",Toast.LENGTH_SHORT).show();
                         //save data to firebase for main board
+
                         dbRef.child("Club").child(clubName).child("Board").child("Main").child(post).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -121,7 +122,6 @@ public class MainBoardAddPage extends AppCompatActivity
             }
         });
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

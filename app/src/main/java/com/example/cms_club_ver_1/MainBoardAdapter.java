@@ -36,7 +36,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardAdapter.Hold
         holder.profile.setImageResource(arrayList.get(position).getImg_profile());
         holder.textName.setText(arrayList.get(position).getName());
         holder.textPost.setText(arrayList.get(position).getPost());
-        holder.bind(arrayList.get(position),listener);
+       // holder.bind(arrayList.get(position),listener);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class MainBoardAdapter extends RecyclerView.Adapter<MainBoardAdapter.Hold
             textPost = itemView.findViewById(R.id.txt_role);
         }
 
-        public void bind(final MainBoardPOJO item, final OnMainBoardRowClickListener listener) {
+        public void bind(final main item, final OnMainBoardRowClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);

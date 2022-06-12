@@ -14,6 +14,7 @@ import com.denzcoskun.imageslider.ImageSlider;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.embersoft.expandabletextview.ExpandableTextView;
 
@@ -39,6 +40,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         holder.textEventName.setText(list.get(position).getName());
         holder.textDate.setText(list.get(position).getDate());
         holder.expandableDescription.setText(list.get(position).getDescription());
+        holder.expandableDescription.setOnStateChangeListener(new ExpandableTextView.OnStateChangeListener() {
+            @Override
+            public void onStateChange(boolean isShrink) {
+                event item = list.get(position);
+                item.setShrink(isShrink);
+                list.set(position,item);
+            }
+        });
+        holder.expandableDescription.setText(list.get(position).getDescription());
+        holder.expandableDescription.resetState(list.get(position).isShrink);
+        holder.bind(list.get(position),listener);
 
 
 
@@ -64,6 +76,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
             expandableDescription = itemView.findViewById(R.id.expandable_description);
             imageSlider=itemView.findViewById(R.id.image_slider);
 
+        }
+        public void bind(final event item, final OnEventClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+
+                    listener.onItemClicked(item);
+                }
+            });
         }
     }
 }
